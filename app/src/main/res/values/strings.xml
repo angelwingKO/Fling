@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Fling</string>
+
+    <string name="flingTo">Fling to:</string>
+    <string name="myInfo">My Information:</string>
+
+    <string name="phoneNumber">Phone Number</string>
+    <string name="phoneNumberHint">1 (440) 555-1234</string>
+    <string name="email">Email</string>
+    <string name="emailHint">angelwing@yopmail.com</string>
+    <string name="at">\@</string>
+
+    <array name="infoTypes">
+        <item name="phone">Phone Number</item>
+        <item name="email">Email</item>
+        <item name="facebook">Facebook</item>
+        <item name="instagram">Instagram</item>
+        <item name="twitter">Twitter</item>
+    </array>
+
+    <array name="recipientTypes">
+        <item name="phone">Phone Number</item>
+        <item name="email">Email</item>
+    </array>
+
+</resources>
