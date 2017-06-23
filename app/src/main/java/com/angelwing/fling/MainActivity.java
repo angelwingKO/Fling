@@ -30,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -583,12 +584,15 @@ public class MainActivity extends AppCompatActivity {
 
                 if (emailRecipients.size() != 0)
                 {
+                    //////// Make it BBC
+
                     Intent emailIntent = new Intent(Intent.ACTION_SEND);
                     emailIntent.setData(Uri.parse("mailto:"));
                     emailIntent.setType("text/plain");
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Fling from " + userName);
                     emailIntent.putExtra(Intent.EXTRA_TEXT, flingText);
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, (String[]) emailRecipients.toArray());
+                    String[] emailAddresses = Arrays.copyOf(emailRecipients.toArray(), emailRecipients.size(), String[].class);
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, emailAddresses);
                     startActivity(emailIntent);
                 }
 
