@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -93,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         myFacebookHandles = new HashSet<>(myFacebooks);
         myInstagramHandles = new HashSet<>(myInstagrams);
         myTwitterHandles = new HashSet<>(myTwitters);
-
 
         int i;
         for (String twitterHandle : myTwitterHandles)
@@ -553,21 +553,49 @@ public class MainActivity extends AppCompatActivity {
             // If send sms permission hasn't been granted
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED)
             {
-                String flingText = "Fling from " + userName;
+                String flingText = "Fling from " + userName + "\n";
                 //////// Check what info you're sending
-
-
+                for (String phoneNumber : myPhoneNumbers)
+                {
+                    flingText += phoneNumber + "\n";
+                }
+                for (String emailAddress : myEmailAddresses)
+                {
+                    flingText += emailAddress + "\n";
+                }
+                for (String facebookHandle : myFacebookHandles)
+                {
+                    flingText += "Facebook: https://www.facebook.com/" + facebookHandle + "\n";
+                }
+                for (String instagramHandle: myInstagramHandles)
+                {
+                    flingText += "Instagram: @" + instagramHandle + "\n";
+                }
+                for (String twitterHandle : myTwitterHandles)
+                {
+                    flingText += "Twitter: @" + twitterHandle;
+                }
 
                 for (String phoneNumber : phoneRecipients)
                 {
                     smsManager.sendTextMessage(phoneNumber, null, flingText, null, null);
                 }
 
+                if (emailRecipients.size() != 0)
+                {
+                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                    emailIntent.setData(Uri.parse("mailto:"));
+                    emailIntent.setType("text/plain");
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Fling from " + userName);
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, flingText);
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, (String[]) emailRecipients.toArray());
+                    startActivity(emailIntent);
+                }
+
                 Log.i("Flingg", "Permission granted");
             }
             else
                 ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSIONS_SEND_SMS);
-
 
             Log.i("Flingg", "Sendd");
         }
