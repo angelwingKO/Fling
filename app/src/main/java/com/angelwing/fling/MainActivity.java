@@ -34,6 +34,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
+    ///////////// Test test test
     MainActivity thisActivity = this;
     SharedPreferences sp;
     EditText firstRecipientField;
