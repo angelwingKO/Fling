@@ -65,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        ////// Test test test test
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         sp = getSharedPreferences("com.angelwing.fling", Context.MODE_PRIVATE);
 
         userName = sp.getString("userName", "");
