@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
     MainActivity thisActivity = this;
     SharedPreferences sp;
-    EditText firstRecipientField;
     LinearLayout additionalRecipients;
     LinearLayout additionalInformation;
     String userName;
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
                                 additionalRecipients.addView(recipientField);
                                 numRecipients++;
 
-                                emailRecipients.add(info);
+//                                emailRecipients.add(info);
 
                                 dialog.dismiss();
                             }
@@ -257,6 +258,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void removeRecipient (View view)
     {
+        /////////////////////// Fix. Only removes view, not the actual recipient.
+
+
+
+
         additionalRecipients.removeView((ViewGroup) view.getParent());
         numRecipients--;
     }
@@ -462,13 +468,13 @@ public class MainActivity extends AppCompatActivity {
                 return isEmailValid(info) && !myEmailAddresses.contains(info);
             // Facebook
             case 2:
-                return info.length() != 0 && myFacebookHandles.contains(info);
+                return info.length() != 0 && !myFacebookHandles.contains(info);
             // Instagram
             case 3:
-                return info.length() != 0 && myInstagramHandles.contains(info);
+                return info.length() != 0 && !myInstagramHandles.contains(info);
             // Twitter
             case 4:
-                return info.length() != 0 && myTwitterHandles.contains(info);
+                return info.length() != 0 && !myTwitterHandles.contains(info);
         }
 
         return true;
@@ -552,49 +558,53 @@ public class MainActivity extends AppCompatActivity {
         {
             /////////// Send
 
+            phoneRecipients.clear();
+            emailRecipients.clear();
+            for (int i = 0; i < additionalRecipients.getChildCount(); i++)
+            {
+                View recipientView = additionalRecipients.getChildAt(i);
+
+                String recipientInfo = ((TextView) recipientView.findViewById(R.id.recipientField)).getText().toString();
+
+                if (isPhoneNumberValid(recipientInfo))
+                    phoneRecipients.add(recipientInfo);
+                else
+                    emailRecipients.add(recipientInfo);
+            }
+
+
+
             SmsManager smsManager = SmsManager.getDefault();
             // If send sms permission hasn't been granted
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED)
             {
-                String flingText = "Fling from " + userName + "\n";
-                //////// Check what info you're sending
-                for (String phoneNumber : myPhoneNumbers)
-                {
-                    flingText += phoneNumber + "\n";
-                }
-                for (String emailAddress : myEmailAddresses)
-                {
-                    flingText += emailAddress + "\n";
-                }
-                for (String facebookHandle : myFacebookHandles)
-                {
-                    flingText += "Facebook: https://www.facebook.com/" + facebookHandle + "\n";
-                }
-                for (String instagramHandle: myInstagramHandles)
-                {
-                    flingText += "Instagram: @" + instagramHandle + "\n";
-                }
-                for (String twitterHandle : myTwitterHandles)
-                {
-                    flingText += "Twitter: @" + twitterHandle;
-                }
-
                 for (String phoneNumber : phoneRecipients)
                 {
+                    String flingText = getFlingText('p');
                     smsManager.sendTextMessage(phoneNumber, null, flingText, null, null);
                 }
 
                 if (emailRecipients.size() != 0)
                 {
                     //////// Make it BBC
+                    String flingText = getFlingText('e');
+                    Log.i("Flingg", "flingText: " + flingText);
 
                     Intent emailIntent = new Intent(Intent.ACTION_SEND);
                     emailIntent.setData(Uri.parse("mailto:"));
-                    emailIntent.setType("text/plain");
+                    emailIntent.setType("text/html");
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Fling from " + userName);
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, flingText);
+                    if (Build.VERSION.SDK_INT >= 24)
+                    {
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText, Html.FROM_HTML_MODE_COMPACT));
+                        emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, flingText);
+                    }
+//                    else if (Build.VERSION.SDK_INT >= 16)
+//                        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText));
+                    else
+                        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText));
                     String[] emailAddresses = Arrays.copyOf(emailRecipients.toArray(), emailRecipients.size(), String[].class);
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, emailAddresses);
+                    emailIntent.putExtra(Intent.EXTRA_BCC, emailAddresses);
                     startActivity(emailIntent);
                 }
 
@@ -605,6 +615,104 @@ public class MainActivity extends AppCompatActivity {
 
             Log.i("Flingg", "Sendd");
         }
+    }
+
+    public String getFlingText(char type)
+    {
+        String flingText = "";
+
+        ArrayList<String> checkedPhoneNumbers = new ArrayList<>();
+        ArrayList<String> checkedEmailAddresses = new ArrayList<>();
+        ArrayList<String> checkedFacebookHandles = new ArrayList<>();
+        ArrayList<String> checkedInstagramHandles = new ArrayList<>();
+        ArrayList<String> checkedTwitterHandles = new ArrayList<>();
+
+        for (int i = 0; i < additionalInformation.getChildCount(); i++)
+        {
+            View infoView = additionalInformation.getChildAt(i);
+
+            if (!((CheckBox) infoView.findViewById(R.id.selectBox)).isChecked())
+                continue;
+
+            String infoType = ((TextView) infoView.findViewById(R.id.infoTypeField)).getText().toString();
+            String info = ((TextView) infoView.findViewById(R.id.infoField)).getText().toString();
+
+            if (infoType.equals("Phone Number"))
+                checkedPhoneNumbers.add(info);
+            else if (infoType.equals("Email Address"))
+                checkedEmailAddresses.add(info);
+            else if (infoType.equals("Facebook"))
+                checkedFacebookHandles.add(info);
+            else if (infoType.equals("Instagram"))
+                checkedInstagramHandles.add(info);
+            else if (infoType.equals("Twitter"))
+                checkedTwitterHandles.add(info);
+        }
+
+        Log.i("Flingg", "fling type : " + type);
+
+        if (type == 'p')
+        {
+            flingText = "Fling from " + userName + "\n";
+            //////// Check what info you're sending
+            for (String phoneNumber : checkedPhoneNumbers)
+            {
+                flingText += phoneNumber + "\n";
+            }
+            for (String emailAddress : checkedEmailAddresses)
+            {
+                flingText += emailAddress + "\n";
+            }
+            for (String facebookHandle : checkedFacebookHandles)
+            {
+                flingText += "Facebook: https://www.facebook.com/" + facebookHandle + "\n";
+            }
+            for (String instagramHandle: checkedInstagramHandles)
+            {
+                flingText += "Instagram: @" + instagramHandle + "\n";
+            }
+            for (String twitterHandle : checkedTwitterHandles)
+            {
+                flingText += "Twitter: @" + twitterHandle;
+            }
+        }
+        ///////////// Hyperlink not working for Marshmallow. Only device tested lol
+        else if (type == 'e')
+        {
+            flingText = "<b>" + userName + "'s:</b><br/>";
+
+            for (String phoneNumber : checkedPhoneNumbers)
+            {
+//                flingText += "Phone Number: ";
+                flingText += phoneNumber + "<br/>";
+            }
+            for (String emailAddress : checkedEmailAddresses)
+            {
+//                flingText += "Email: ";
+                flingText += emailAddress + "<br/>";
+            }
+            for (String facebookHandle : checkedFacebookHandles)
+            {
+//                Uri facebookUri = Uri.parse("https://www.facebook.com/" + facebookHandle);
+//                flingText += "<a href=\"" + facebookUri + "\">Facebook</a><br/>";
+
+                flingText += "Facebook: @" + facebookHandle + "<br/>";
+            }
+            for (String instagramHandle: checkedInstagramHandles)
+            {
+                flingText += "Instagram: @" + instagramHandle + "<br/>";
+            }
+            for (String twitterHandle : checkedTwitterHandles)
+            {
+                flingText += "Twitter: @" + twitterHandle + "<br/>";
+            }
+        }
+
+
+        Log.i("Flingg", "flingText: " + flingText);
+
+
+        return flingText;
     }
 
     //* [ Menu ] *//

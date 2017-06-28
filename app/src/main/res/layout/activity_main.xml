@@ -29,7 +29,7 @@
             <TextView
                 android:id="@+id/flingToText"
                 android:text="@string/flingTo"
-                android:textColor="@color/defaultTextColor"
+                android:textColor="@color/headingTextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -52,7 +52,7 @@
             <TextView
                 android:id="@+id/myInfoText"
                 android:text="@string/myInfo"
-                android:textColor="@color/defaultTextColor"
+                android:textColor="@color/headingTextColor"
                 android:layout_below="@id/addRecipientButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

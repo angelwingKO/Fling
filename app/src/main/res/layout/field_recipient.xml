@@ -6,6 +6,7 @@
 
     <ImageButton
         android:id="@+id/deleteButton"
+        android:text="-"
         android:onClick="removeRecipient"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -14,8 +15,12 @@
 
     <TextView
         android:id="@+id/recipientField"
+        android:textColor="@color/defaultTextColor"
+        android:gravity="center_vertical"
         android:layout_toStartOf="@id/deleteButton"
         android:layout_toLeftOf="@id/deleteButton"
+        android:layout_alignTop="@+id/deleteButton"
+        android:layout_alignBottom="@id/deleteButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

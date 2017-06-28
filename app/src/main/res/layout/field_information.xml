@@ -4,26 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <CheckBox
-        android:id="@+id/selectBox"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp" />
-
-    <TextView
-        android:id="@+id/infoTypeField"
-        android:layout_alignTop="@id/selectBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/infoField"
-        android:layout_toStartOf="@id/selectBox"
-        android:layout_toLeftOf="@id/selectBox"
-        android:layout_below="@id/infoTypeField"
-        android:layout_alignBottom="@id/selectBox"
+    <View
+        android:id="@+id/divider"
+        android:background="@color/divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_margin="@dimen/infoMargin"
+        android:layout_below="@id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/selectBox"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/infoFieldHeight" />
+
+        <TextView
+            android:id="@+id/infoTypeField"
+            android:textColor="@color/headingTextColor"
+            android:layout_alignTop="@id/selectBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/infoField"
+            android:textColor="@color/defaultTextColor"
+            android:textSize="@dimen/infoTextSize"
+            android:gravity="center_vertical"
+
+            android:layout_toStartOf="@id/selectBox"
+            android:layout_toLeftOf="@id/selectBox"
+            android:layout_below="@id/infoTypeField"
+            android:layout_alignStart="@id/infoTypeField"
+            android:layout_alignLeft="@id/infoTypeField"
+            android:layout_alignBottom="@id/selectBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </RelativeLayout>

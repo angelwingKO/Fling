@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="headingTextColor">#3b3b3b</color>
     <color name="defaultTextColor">#000000</color>
     <color name="dialogTextColor">#000000</color>
+
+    <color name="divider">#3b3b3b</color>
 </resources>
