@@ -9,4 +9,7 @@
     <color name="dialogTextColor">#000000</color>
 
     <color name="divider">#3b3b3b</color>
+
+    <color name="addButtonBackground">#bfe484</color>
+    <color name="deleteButtonBackground">#df6464</color>
 </resources>

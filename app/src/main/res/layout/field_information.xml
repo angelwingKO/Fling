@@ -35,7 +35,6 @@
             android:textColor="@color/defaultTextColor"
             android:textSize="@dimen/infoTextSize"
             android:gravity="center_vertical"
-
             android:layout_toStartOf="@id/selectBox"
             android:layout_toLeftOf="@id/selectBox"
             android:layout_below="@id/infoTypeField"

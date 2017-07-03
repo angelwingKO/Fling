@@ -4,24 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/deleteButton"
-        android:text="-"
-        android:onClick="removeRecipient"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="@dimen/iconSize"
-        android:layout_height="@dimen/iconSize" />
-
-    <TextView
-        android:id="@+id/recipientField"
-        android:textColor="@color/defaultTextColor"
-        android:gravity="center_vertical"
-        android:layout_toStartOf="@id/deleteButton"
-        android:layout_toLeftOf="@id/deleteButton"
-        android:layout_alignTop="@+id/deleteButton"
-        android:layout_alignBottom="@id/deleteButton"
+    <View
+        android:id="@+id/divider"
+        android:background="@android:color/black"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="1dp" />
+
+    <RelativeLayout
+        android:layout_below="@id/divider"
+        android:layout_margin="@dimen/infoMargin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:onClick="removeRecipient"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/iconSize"
+            android:layout_height="@dimen/iconSize" />
+
+        <TextView
+            android:id="@+id/recipientField"
+            android:textColor="@color/defaultTextColor"
+            android:textSize="@dimen/infoTextSize"
+            android:gravity="center_vertical"
+            android:layout_toStartOf="@id/deleteButton"
+            android:layout_toLeftOf="@id/deleteButton"
+            android:layout_alignTop="@+id/deleteButton"
+            android:layout_alignBottom="@id/deleteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </RelativeLayout>

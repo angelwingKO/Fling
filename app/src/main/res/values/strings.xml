@@ -4,11 +4,16 @@
     <string name="flingTo">Fling to:</string>
     <string name="myInfo">My Information:</string>
 
+    <string name="name">Name</string>
+    <string name="nameHint">John Smith</string>
     <string name="phoneNumber">Phone Number</string>
     <string name="phoneNumberHint">1 (440) 555-1234</string>
     <string name="email">Email</string>
     <string name="emailHint">angelwing@yopmail.com</string>
     <string name="at">\@</string>
+
+    <string name="addRecipient">Add Recipient</string>
+    <string name="addYourInformation">Add your information</string>
 
     <array name="infoTypes">
         <item name="phone">Phone Number</item>

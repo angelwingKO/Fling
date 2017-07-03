@@ -3,7 +3,7 @@
 
     <dimen name="margin">10dp</dimen>
 
-    <dimen name="iconSize">40dp</dimen>
+    <dimen name="iconSize">25dp</dimen>
 
     <dimen name="infoMargin">5dp</dimen>
     <dimen name="infoFieldHeight">45dp</dimen>
@@ -11,4 +11,6 @@
     <dimen name="dialogPaddingAround">10dp</dimen>
     <dimen name="dialogMarginBetween">15dp</dimen>
     <dimen name="dialogHeaderTextSize">12sp</dimen>
+
+    <dimen name="headingMarginBottom">2dp</dimen>
 </resources>

@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/dialogPaddingAround"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Name"
+        android:text="@string/name"
+        android:textColor="@color/headingTextColor"
+        android:layout_margin="4dp"
+        android:enabled="false"
+        android:background="@null"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/nameField"
-        android:hint="John Smith"
+        android:hint="@string/nameHint"
         android:inputType="textCapWords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

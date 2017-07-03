@@ -30,6 +30,7 @@
                 android:id="@+id/flingToText"
                 android:text="@string/flingTo"
                 android:textColor="@color/headingTextColor"
+                android:layout_marginBottom="@dimen/headingMarginBottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -42,9 +43,9 @@
 
             <ImageButton
                 android:id="@+id/addRecipientButton"
+                android:contentDescription="@string/addRecipient"
+                style="@style/addButtonStyle"
                 android:onClick="addRecipient"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_below="@id/newRecipientInsert"
                 android:layout_width="@dimen/iconSize"
                 android:layout_height="@dimen/iconSize" />
@@ -53,6 +54,7 @@
                 android:id="@+id/myInfoText"
                 android:text="@string/myInfo"
                 android:textColor="@color/headingTextColor"
+                android:layout_marginBottom="@dimen/headingMarginBottom"
                 android:layout_below="@id/addRecipientButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -66,9 +68,9 @@
 
             <ImageButton
                 android:id="@+id/addInfoButton"
+                android:contentDescription="@string/addYourInformation"
+                style="@style/addButtonStyle"
                 android:onClick="addInfo"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_below="@id/newInfoInsert"
                 android:layout_width="@dimen/iconSize"
                 android:layout_height="@dimen/iconSize" />

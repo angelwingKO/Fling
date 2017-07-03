@@ -23,11 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             infoTypeField.setText("Twitter");
             infoField.setText(twitterHandle);
 
+            informationOnClick(informationField);
             setInfoDelete(informationField);
 
             additionalInformation.addView(informationField);
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
             infoTypeField.setText("Instagram");
             infoField.setText(instagramHandle);
 
+            informationOnClick(informationField);
             setInfoDelete(informationField);
 
             additionalInformation.addView(informationField);
@@ -137,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             infoTypeField.setText("Facebook");
             infoField.setText(facebookHandle);
 
+            informationOnClick(informationField);
             setInfoDelete(informationField);
 
             additionalInformation.addView(informationField);
@@ -151,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             infoTypeField.setText("Email Address");
             infoField.setText(emailAddress);
 
+            informationOnClick(informationField);
             setInfoDelete(informationField);
 
             additionalInformation.addView(informationField);
@@ -165,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
             infoTypeField.setText("Phone Number");
             infoField.setText(phoneNumber);
 
+            informationOnClick(informationField);
             setInfoDelete(informationField);
 
             additionalInformation.addView(informationField);
@@ -180,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_recipient, null);
         final Spinner infoTypeSpinner = (Spinner) dialogView.findViewById(R.id.infoTypeSpinner);
         final EditText infoField = (EditText) dialogView.findViewById(R.id.infoField);
+        infoField.requestFocus();
 
         addRecipientDialogBuilder
                 .setView(dialogView)
@@ -203,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final AlertDialog addRecipientDialog = addRecipientDialogBuilder.create();
+        addRecipientDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         addRecipientDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(final DialogInterface dialog) {
@@ -275,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_info, null);
         final Spinner infoTypeSpinner = (Spinner) dialogView.findViewById(R.id.infoTypeSpinner);
         final EditText infoField = (EditText) dialogView.findViewById(R.id.infoField);
+        infoField.requestFocus();
 
         final TextView infoText = (TextView) dialogView.findViewById(R.id.infoText);
         final TextView atText = (TextView) dialogView.findViewById(R.id.atText);
@@ -335,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null);
 
         final AlertDialog addInfoDialog = addInfoDialogBuilder.create();
+        addInfoDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         addInfoDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(final DialogInterface dialog) {
@@ -400,7 +410,20 @@ public class MainActivity extends AppCompatActivity {
 
         addInfoDialog.show();
 
+        informationOnClick(informationField);
         setInfoDelete(informationField);
+    }
+
+    public void informationOnClick(View informationField)
+    {
+        informationField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                CheckBox selectBox = (CheckBox) v.findViewById(R.id.selectBox);
+                selectBox.setChecked(!selectBox.isChecked());
+            }
+        });
     }
 
     public void setInfoDelete(final View informationField)
@@ -572,8 +595,6 @@ public class MainActivity extends AppCompatActivity {
                     emailRecipients.add(recipientInfo);
             }
 
-
-
             SmsManager smsManager = SmsManager.getDefault();
             // If send sms permission hasn't been granted
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED)
@@ -583,36 +604,32 @@ public class MainActivity extends AppCompatActivity {
                     String flingText = getFlingText('p');
                     smsManager.sendTextMessage(phoneNumber, null, flingText, null, null);
                 }
-
-                if (emailRecipients.size() != 0)
-                {
-                    //////// Make it BBC
-                    String flingText = getFlingText('e');
-                    Log.i("Flingg", "flingText: " + flingText);
-
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                    emailIntent.setData(Uri.parse("mailto:"));
-                    emailIntent.setType("text/html");
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Fling from " + userName);
-                    if (Build.VERSION.SDK_INT >= 24)
-                    {
-                        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText, Html.FROM_HTML_MODE_COMPACT));
-                        emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, flingText);
-                    }
-//                    else if (Build.VERSION.SDK_INT >= 16)
-//                        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText));
-                    else
-                        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText));
-                    String[] emailAddresses = Arrays.copyOf(emailRecipients.toArray(), emailRecipients.size(), String[].class);
-                    emailIntent.putExtra(Intent.EXTRA_BCC, emailAddresses);
-                    startActivity(emailIntent);
-                }
-
-                Log.i("Flingg", "Permission granted");
             }
             else
                 ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SEND_SMS}, MY_PERMISSIONS_SEND_SMS);
 
+            if (emailRecipients.size() != 0)
+            {
+                String flingText = getFlingText('e');
+                Log.i("Flingg", "flingText: " + flingText);
+
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setData(Uri.parse("mailto:"));
+                emailIntent.setType("text/html");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Fling from " + userName);
+                if (Build.VERSION.SDK_INT >= 24)
+                {
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText, Html.FROM_HTML_MODE_COMPACT));
+                    emailIntent.putExtra(Intent.EXTRA_HTML_TEXT, flingText);
+                }
+//                    else if (Build.VERSION.SDK_INT >= 16)
+//                        emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText));
+                else
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(flingText));
+                String[] emailAddresses = Arrays.copyOf(emailRecipients.toArray(), emailRecipients.size(), String[].class);
+                emailIntent.putExtra(Intent.EXTRA_BCC, emailAddresses);
+                startActivity(emailIntent);
+            }
             Log.i("Flingg", "Sendd");
         }
     }
@@ -653,8 +670,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (type == 'p')
         {
-            flingText = "Fling from " + userName + "\n";
-            //////// Check what info you're sending
+            flingText = "Fling from " + userName + "\n\n";
+
             for (String phoneNumber : checkedPhoneNumbers)
             {
                 flingText += phoneNumber + "\n";
